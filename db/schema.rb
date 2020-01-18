@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_18_141027) do
+ActiveRecord::Schema.define(version: 2020_01_18_141030) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,9 +102,11 @@ ActiveRecord::Schema.define(version: 2020_01_18_141027) do
     t.string "code"
     t.string "random_color"
     t.bigint "flow_id"
+    t.bigint "form_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["flow_id"], name: "index_tasks_on_flow_id"
+    t.index ["form_id"], name: "index_tasks_on_form_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -127,4 +129,5 @@ ActiveRecord::Schema.define(version: 2020_01_18_141027) do
   add_foreign_key "instances", "users", column: "responsable_id"
   add_foreign_key "task_evidences", "tasks"
   add_foreign_key "tasks", "flows"
+  add_foreign_key "tasks", "forms"
 end
