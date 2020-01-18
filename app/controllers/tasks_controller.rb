@@ -2,14 +2,14 @@ class TasksController < ApplicationController
   respond_to :json
 
   def index
-    flows = Task.limit(10)
-    render jsonapi: flows
+    resources = Task.includes(:form).limit(10)
+    render jsonapi: resources, include: [:form]
   end
 
   def create
     resource_service = TaskService.new(create_params, form_attributes)
     if resource_service.create
-      render jsonapi: resource_service.resource
+      render jsonapi: resource_service.resource, include: [:form]
     else
       render jsonapi_errors: resource_service.errors, :status => :bad_request
     end

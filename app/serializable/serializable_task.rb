@@ -5,4 +5,6 @@ class SerializableTask < JSONAPI::Serializable::Resource
   attribute :description
   attribute :created_at
   attribute :updated_at
+
+  belongs_to :form
 end
