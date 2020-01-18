@@ -16,6 +16,11 @@ class FlowsController < ApplicationController
     end
   end
 
+  def show
+    flow = Flow.find(params[:id])
+    render jsonapi: flow
+  end
+
   private
     def create_params
       params
