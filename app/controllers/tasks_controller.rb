@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   respond_to :json
 
   def index
-    resources = Task.includes(:form).limit(10)
+    resources = Task.includes(:form)
     render jsonapi: resources, include: [:form]
   end
 
@@ -17,8 +17,9 @@ class TasksController < ApplicationController
 
   def update
     resource = Task.find(params[:id])
-    if resource.update_attributes(update_params)
-      render jsonapi: resource
+    resource_service = TaskService.new(update_params, form_attributes)
+    if resource_service.update(resource)
+      render jsonapi: resource, include: [:form]
     else
       render jsonapi_errors: resource.errors, :status => :bad_request
     end
@@ -39,7 +40,7 @@ class TasksController < ApplicationController
         .require(:form)
         .require(:data)
         .require(:attributes)
-        .permit(:schema)
+        .permit!
     end
 
     def update_params
