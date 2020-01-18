@@ -3,6 +3,7 @@ class SerializableFlow < JSONAPI::Serializable::Resource
 
   attribute :title
   attribute :description
+  attribute :default_responsable_id
   attribute :created_at
   attribute :updated_at
 end

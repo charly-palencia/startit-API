@@ -6,6 +6,15 @@ class FlowsController < ApplicationController
     render jsonapi: flows
   end
 
+  def update
+    flow = Flow.find(params[:id])
+    if flow.update(create_params)
+      render jsonapi: flow
+    else
+      render jsonapi_errors: flow.errors, :status => :bad_request
+    end
+  end
+
   def create
     flow = Flow.new(create_params)
     flow.created_by = current_user
