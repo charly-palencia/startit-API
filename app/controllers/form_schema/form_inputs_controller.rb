@@ -31,13 +31,13 @@ class FormSchema::FormInputsController < ApplicationController
       params
         .require(:data)
         .require(:attributes)
-        .permit(:title, :description, :required, :type, :order, :form_schema_form_id)
+        .permit(:title, :description, :required, :type, :order, :form_schema_form_id, options: [])
     end
 
     def update_params
       params
       .require(:data)
       .require(:attributes)
-      .permit(:title, :description, :required, :order)
+      .permit(:title, :description, :required, :order, :options)
     end
 end
