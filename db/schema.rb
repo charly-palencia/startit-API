@@ -59,6 +59,9 @@ ActiveRecord::Schema.define(version: 2020_01_19_012341) do
   end
 
   create_table "form_schema_text_inputs", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "description"
+    t.boolean "required", null: false
     t.integer "form_schema_form_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
