@@ -1,6 +1,6 @@
-class FormSchema::TextInputsController < ApplicationController
+class FormSchema::FormInputsController < ApplicationController
   def create
-    resource = FormSchema::TextInput.new(create_params)
+    resource = FormSchema::FormInput.new(create_params)
     if resource.save
       render jsonapi: resource
     else
@@ -9,16 +9,16 @@ class FormSchema::TextInputsController < ApplicationController
   end
 
   def update
-    resource = FormSchema::TextInput.find(params[:id])
+    resource = FormSchema::FormInput.find(params[:id])
     if resource.update(create_params)
-      render jsonapi: flow
+      render jsonapi: resource
     else
       render jsonapi_errors: resource.errors, :status => :bad_request
     end
   end
 
   def destroy
-    resource = FormSchema::TextInput.find(params[:id])
+    resource = FormSchema::FormInput.find(params[:id])
     if resource.destroy
       render jsonapi: resource, include: [:form]
     else
@@ -31,13 +31,13 @@ class FormSchema::TextInputsController < ApplicationController
       params
         .require(:data)
         .require(:attributes)
-        .permit(:title, :description, :required, :form_schema_form_id)
+        .permit(:title, :description, :required, :type, :order, :form_schema_form_id)
     end
 
     def update_params
       params
       .require(:data)
       .require(:attributes)
-      .permit(:title, :description, :required)
+      .permit(:title, :description, :required, :order)
     end
 end

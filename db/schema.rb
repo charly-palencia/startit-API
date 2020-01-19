@@ -38,6 +38,26 @@ ActiveRecord::Schema.define(version: 2020_01_19_012341) do
     t.index ["default_responsable_id"], name: "index_flows_on_default_responsable_id"
   end
 
+  create_table "form_schema_form_input_responses", force: :cascade do |t|
+    t.string "value"
+    t.integer "form_schema_form_instance_id"
+    t.string "input_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "form_schema_form_inputs", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "description"
+    t.boolean "required", null: false
+    t.integer "order", null: false
+    t.jsonb "schema", default: {}, null: false
+    t.string "type", null: false
+    t.integer "form_schema_form_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "form_schema_form_instances", force: :cascade do |t|
     t.datetime "finished_at"
     t.integer "form_schema_form_id"
@@ -46,23 +66,6 @@ ActiveRecord::Schema.define(version: 2020_01_19_012341) do
   end
 
   create_table "form_schema_forms", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "form_schema_text_input_responses", force: :cascade do |t|
-    t.string "value"
-    t.integer "form_schema_form_instance_id"
-    t.string "input_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "form_schema_text_inputs", force: :cascade do |t|
-    t.string "title", null: false
-    t.string "description"
-    t.boolean "required", null: false
-    t.integer "form_schema_form_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -129,9 +132,9 @@ ActiveRecord::Schema.define(version: 2020_01_19_012341) do
   add_foreign_key "flow_instances", "users", column: "responsable_id"
   add_foreign_key "flows", "users", column: "created_by_id"
   add_foreign_key "flows", "users", column: "default_responsable_id"
+  add_foreign_key "form_schema_form_input_responses", "form_schema_form_instances", name: "form_input_responses_form_instances_indx"
+  add_foreign_key "form_schema_form_inputs", "form_schema_forms", name: "form_input_form_indx"
   add_foreign_key "form_schema_form_instances", "form_schema_forms", name: "form_instances_form_indx"
-  add_foreign_key "form_schema_text_input_responses", "form_schema_form_instances", name: "text_input_responses_form_instances_indx"
-  add_foreign_key "form_schema_text_inputs", "form_schema_forms", name: "text_input_form_indx"
   add_foreign_key "tasks", "flows"
   add_foreign_key "tasks", "form_schema_forms"
 end

@@ -1,6 +1,6 @@
 module FormSchema
-  class SerializableTextInput < JSONAPI::Serializable::Resource
-    type 'form_schema/text_inputs'
+  class SerializableFormTextInput < FormSchema::SerializableFormInput
+    type 'form_schema/form_text_inputs'
 
     attribute :title
     attribute :description
