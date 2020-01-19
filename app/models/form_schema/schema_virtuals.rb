@@ -5,7 +5,7 @@ module FormSchema::SchemaVirtuals
   end
 
   module ClassMethods
-    def define_virtuals(*virtuals)
+    def define_schema_virtuals(*virtuals)
       virtuals.each do |virtual|
         virtual_str = virtual.to_s
         define_method(virtual) do

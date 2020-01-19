@@ -1,4 +1,4 @@
-class FormSchema::FormSelectInputSchema
+class FormSchema::Schema::FormSelectInputSchema
   include ActiveModel::Validations
   include ActiveModel::AttributeAssignment
 
