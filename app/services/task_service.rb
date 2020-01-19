@@ -2,25 +2,24 @@ class TaskService
   include ActiveModel::Validations
   include ActiveModel::AttributeAssignment
 
-  attr_accessor :title, :description, :flow_id, :resource, :relationships, :form_attributes
+  attr_accessor :title, :description, :flow_id, :resource, :relationships
   # validates_presence_of :title, :flow_id
 
-  def initialize(args, form_attributes)
+  def initialize(args)
     assign_attributes(args)
-    self.form_attributes = form_attributes
-    self.relationships = {}
   end
 
   def create
     build_object do
       validate!
       Task.transaction do
-        self.relationships[:form] = Form.create!(form_attributes)
+        form = FormSchema::Form.create!({})
+
         self.resource = Task.create!(
           title: title,
           description: description,
           flow_id: flow_id,
-          form_id: relationships[:form].id
+          form: form
         )
       end
     end
@@ -30,17 +29,9 @@ class TaskService
     build_object do
       validate!
       Task.transaction do
-        self.relationships[:form] = if resource.form
-          resource.form.update_attributes!(form_attributes)
-          resource.form
-        else
-          Form.create!(form_attributes)
-        end
-
         self.resource = resource.update_attributes!(
           title: title,
           description: description,
-          form_id: relationships[:form].id
         )
       end
     end
@@ -52,7 +43,7 @@ class TaskService
       action.call
     rescue ActiveModel::ValidationError, ActiveRecord::RecordInvalid => e
       record_errors = e.record.errors
-      if e.record.is_a? Form
+      if e.record.is_a? FormSchema::Form
         record_errors.to_h.each do |field, error|
           errors.add!(:form, error)
         end

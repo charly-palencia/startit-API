@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_18_141030) do
+ActiveRecord::Schema.define(version: 2020_01_19_012341) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "flow_instances", force: :cascade do |t|
+    t.bigint "responsable_id"
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.bigint "flow_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["flow_id"], name: "index_flow_instances_on_flow_id"
+    t.index ["responsable_id"], name: "index_flow_instances_on_responsable_id"
+  end
 
   create_table "flows", force: :cascade do |t|
     t.string "title"
@@ -27,30 +38,30 @@ ActiveRecord::Schema.define(version: 2020_01_18_141030) do
     t.index ["default_responsable_id"], name: "index_flows_on_default_responsable_id"
   end
 
-  create_table "forms", force: :cascade do |t|
-    t.jsonb "schema", default: {}, null: false
+  create_table "form_schema_form_instances", force: :cascade do |t|
+    t.datetime "finished_at"
+    t.integer "form_schema_form_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "instance_items", force: :cascade do |t|
-    t.datetime "finished_at"
-    t.json "evidence_result"
-    t.bigint "task_id"
+  create_table "form_schema_forms", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["task_id"], name: "index_instance_items_on_task_id"
   end
 
-  create_table "instances", force: :cascade do |t|
-    t.bigint "responsable_id"
-    t.datetime "started_at"
-    t.datetime "finished_at"
-    t.bigint "flow_id"
+  create_table "form_schema_text_input_responses", force: :cascade do |t|
+    t.string "value"
+    t.integer "form_schema_form_instance_id"
+    t.string "input_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["flow_id"], name: "index_instances_on_flow_id"
-    t.index ["responsable_id"], name: "index_instances_on_responsable_id"
+  end
+
+  create_table "form_schema_text_inputs", force: :cascade do |t|
+    t.integer "form_schema_form_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "jwt_blacklist", force: :cascade do |t|
@@ -84,29 +95,17 @@ ActiveRecord::Schema.define(version: 2020_01_18_141030) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "task_evidences", force: :cascade do |t|
-    t.string "name"
-    t.string "type"
-    t.text "description"
-    t.boolean "is_required"
-    t.bigint "task_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["task_id"], name: "index_task_evidences_on_task_id"
-  end
-
   create_table "tasks", force: :cascade do |t|
     t.string "title"
     t.text "description"
     t.string "embedded_url"
     t.string "code"
     t.string "random_color"
+    t.integer "form_schema_form_id"
     t.bigint "flow_id"
-    t.bigint "form_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["flow_id"], name: "index_tasks_on_flow_id"
-    t.index ["form_id"], name: "index_tasks_on_form_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -123,11 +122,13 @@ ActiveRecord::Schema.define(version: 2020_01_18_141030) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "flow_instances", "flows"
+  add_foreign_key "flow_instances", "users", column: "responsable_id"
   add_foreign_key "flows", "users", column: "created_by_id"
   add_foreign_key "flows", "users", column: "default_responsable_id"
-  add_foreign_key "instance_items", "tasks"
-  add_foreign_key "instances", "users", column: "responsable_id"
-  add_foreign_key "task_evidences", "tasks"
+  add_foreign_key "form_schema_form_instances", "form_schema_forms", name: "form_instances_form_indx"
+  add_foreign_key "form_schema_text_input_responses", "form_schema_form_instances", name: "text_input_responses_form_instances_indx"
+  add_foreign_key "form_schema_text_inputs", "form_schema_forms", name: "text_input_form_indx"
   add_foreign_key "tasks", "flows"
-  add_foreign_key "tasks", "forms"
+  add_foreign_key "tasks", "form_schema_forms"
 end

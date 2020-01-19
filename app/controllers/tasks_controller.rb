@@ -7,7 +7,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    resource_service = TaskService.new(create_params, form_attributes)
+    resource_service = TaskService.new(create_params)
     if resource_service.create
       render jsonapi: resource_service.resource, include: [:form]
     else
@@ -17,8 +17,17 @@ class TasksController < ApplicationController
 
   def update
     resource = Task.find(params[:id])
-    resource_service = TaskService.new(update_params, form_attributes)
+    resource_service = TaskService.new(update_params)
     if resource_service.update(resource)
+      render jsonapi: resource, include: [:form]
+    else
+      render jsonapi_errors: resource.errors, :status => :bad_request
+    end
+  end
+
+  def destroy
+    resource = Task.find(params[:id])
+    if resource.destroy
       render jsonapi: resource, include: [:form]
     else
       render jsonapi_errors: resource.errors, :status => :bad_request
@@ -31,16 +40,6 @@ class TasksController < ApplicationController
         .require(:data)
         .require(:attributes)
         .permit(:title, :description, :flow_id)
-    end
-
-    def form_attributes
-      params
-        .require(:data)
-        .require(:relationships)
-        .require(:form)
-        .require(:data)
-        .require(:attributes)
-        .permit!
     end
 
     def update_params
