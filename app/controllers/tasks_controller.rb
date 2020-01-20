@@ -2,8 +2,8 @@ class TasksController < ApplicationController
   respond_to :json
 
   def index
-    resources = Task.where(flow_id: params[:flow_id]).includes(:form)
-    render jsonapi: resources, include: [:form]
+    resources = Task.where(flow_id: params[:flow_id]).includes(form: :form_inputs).order('"order" ASC')
+    render jsonapi: resources, include: [form: :form_inputs]
   end
 
   def create
@@ -39,13 +39,13 @@ class TasksController < ApplicationController
       params
         .require(:data)
         .require(:attributes)
-        .permit(:title, :description, :flow_id)
+        .permit(:title, :description, :flow_id, :order)
     end
 
     def update_params
       params
         .require(:data)
         .require(:attributes)
-        .permit(:title, :description)
+        .permit(:title, :description, :order)
     end
 end
