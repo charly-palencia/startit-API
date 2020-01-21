@@ -4,6 +4,7 @@ module FormSchema
 
     attribute :title
     attribute :description
+    attribute :order
     attribute :required
     attribute :created_at
   end

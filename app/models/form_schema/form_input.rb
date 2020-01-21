@@ -1,6 +1,6 @@
 class FormSchema::FormInput < ApplicationRecord
   include Orderable
-  orderable(:form_id)
+  orderable(:form_schema_form_id)
 
   validates :title, :type, type: { type: :string }, presence: true
   validates :required, type: { type: :boolean }, absence: false
