@@ -3,5 +3,7 @@ module FormSchema
     type 'form_schema/forms'
 
     attribute :created_at
+
+    has_many :inputs
   end
 end

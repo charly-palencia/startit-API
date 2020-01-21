@@ -3,7 +3,7 @@ class TasksController < ApplicationController
 
   def index
     resources = Task.where(flow_id: params[:flow_id]).includes(:form)
-    render jsonapi: resources, include: [:form]
+    render jsonapi: resources, include: [form: :inputs]
   end
 
   def create
