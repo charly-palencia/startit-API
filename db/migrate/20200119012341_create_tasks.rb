@@ -6,6 +6,7 @@ class CreateTasks < ActiveRecord::Migration[5.2]
       t.string :embedded_url
       t.string :code
       t.string :random_color
+      t.integer :order, null: false
       t.integer :form_schema_form_id
       t.references :flow, foreign_key: true
       t.timestamps

@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(version: 2020_01_19_012341) do
     t.string "embedded_url"
     t.string "code"
     t.string "random_color"
+    t.integer "order", null: false
     t.integer "form_schema_form_id"
     t.bigint "flow_id"
     t.datetime "created_at", null: false

@@ -2,37 +2,31 @@ class TaskService
   include ActiveModel::Validations
   include ActiveModel::AttributeAssignment
 
-  attr_accessor :title, :description, :flow_id, :resource, :relationships
-  # validates_presence_of :title, :flow_id
+  attr_accessor :title, :description, :flow_id, :order, :resource
 
   def initialize(args)
     assign_attributes(args)
+    @attributes = args
   end
 
   def create
     build_object do
       validate!
       Task.transaction do
-        form = FormSchema::Form.create!({})
-
-        self.resource = Task.create!(
-          title: title,
-          description: description,
-          flow_id: flow_id,
-          form: form
-        )
+        form = FormSchema::Form.create!
+        self.resource = Task.create!(@attributes.merge(form: form))
+        resource
       end
     end
   end
 
   def update(resource)
+    self.resource = resource
     build_object do
       validate!
       Task.transaction do
-        self.resource = resource.update_attributes!(
-          title: title,
-          description: description,
-        )
+        resource.update_attributes!(@attributes)
+        resource
       end
     end
   end
