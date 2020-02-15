@@ -21,6 +21,8 @@ gem 'puma', '~> 3.11'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+gem 'aasm', '~> 5.0', '>= 5.0.6'
+
 gem 'devise'
 gem 'devise-jwt'
 gem 'jsonapi-rails'

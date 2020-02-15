@@ -6,4 +6,5 @@ class SerializableFlowInstance < JSONAPI::Serializable::Resource
 
   attribute :title
   attribute :user_ids
+  attribute :status
 end

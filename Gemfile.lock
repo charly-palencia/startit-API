@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    aasm (5.0.6)
+      concurrent-ruby (~> 1.0)
     actioncable (5.2.2)
       actionpack (= 5.2.2)
       nio4r (~> 2.0)
@@ -179,6 +181,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aasm (~> 5.0, >= 5.0.6)
   bootsnap (>= 1.1.0)
   byebug
   devise
