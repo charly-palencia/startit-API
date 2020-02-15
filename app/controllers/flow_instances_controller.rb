@@ -26,7 +26,7 @@ class FlowInstancesController < ApplicationController
 
   def show
     flow = FlowInstance.find(params[:id])
-    render jsonapi: flow
+    render jsonapi: flow, include: [:flow, :users, :task_instances]
   end
 
   private
