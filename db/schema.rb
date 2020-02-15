@@ -112,10 +112,13 @@ ActiveRecord::Schema.define(version: 2020_02_15_174406) do
 
   create_table "task_instances", force: :cascade do |t|
     t.bigint "task_id"
+    t.bigint "flow_instance_id"
+    t.integer "form_schema_form_instance_id"
     t.datetime "due_date"
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["flow_instance_id"], name: "index_task_instances_on_flow_instance_id"
     t.index ["task_id"], name: "index_task_instances_on_task_id"
   end
 
@@ -155,6 +158,8 @@ ActiveRecord::Schema.define(version: 2020_02_15_174406) do
   add_foreign_key "form_schema_form_input_responses", "form_schema_form_instances", name: "form_input_responses_form_instances_indx"
   add_foreign_key "form_schema_form_inputs", "form_schema_forms", name: "form_input_form_indx"
   add_foreign_key "form_schema_form_instances", "form_schema_forms", name: "form_instances_form_indx"
+  add_foreign_key "task_instances", "flow_instances"
+  add_foreign_key "task_instances", "form_schema_form_instances", name: "task_instances_form_intsance_indx"
   add_foreign_key "task_instances", "tasks"
   add_foreign_key "tasks", "flows"
   add_foreign_key "tasks", "form_schema_forms"
