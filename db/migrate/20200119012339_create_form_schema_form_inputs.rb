@@ -5,7 +5,7 @@ class CreateFormSchemaFormInputs < ActiveRecord::Migration[5.2]
       t.string :description
       t.boolean :required, null: false
       t.integer :order, null: false
-      t.jsonb    :schema, null: false, default: {}
+      t.jsonb   :schema, null: false, default: {}
       t.string :type, null: false
       t.integer :form_schema_form_id
       t.timestamps

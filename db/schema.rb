@@ -10,20 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_19_012341) do
+ActiveRecord::Schema.define(version: 2020_02_15_152823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "flow_instances", force: :cascade do |t|
-    t.bigint "responsable_id"
+    t.string "title", null: false
+    t.string "status", null: false
+    t.bigint "created_by_id"
     t.datetime "started_at"
     t.datetime "finished_at"
+    t.datetime "due_date"
     t.bigint "flow_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_flow_instances_on_created_by_id"
     t.index ["flow_id"], name: "index_flow_instances_on_flow_id"
-    t.index ["responsable_id"], name: "index_flow_instances_on_responsable_id"
+  end
+
+  create_table "flow_instances_users", id: false, force: :cascade do |t|
+    t.bigint "flow_instance_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["flow_instance_id", "user_id"], name: "index_flow_instances_users_on_flow_instance_id_and_user_id"
   end
 
   create_table "flows", force: :cascade do |t|
@@ -39,9 +48,9 @@ ActiveRecord::Schema.define(version: 2020_01_19_012341) do
   end
 
   create_table "form_schema_form_input_responses", force: :cascade do |t|
-    t.string "value"
+    t.jsonb "value"
     t.integer "form_schema_form_instance_id"
-    t.string "input_id"
+    t.integer "form_schema_form_input_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -130,9 +139,10 @@ ActiveRecord::Schema.define(version: 2020_01_19_012341) do
   end
 
   add_foreign_key "flow_instances", "flows"
-  add_foreign_key "flow_instances", "users", column: "responsable_id"
+  add_foreign_key "flow_instances", "users", column: "created_by_id"
   add_foreign_key "flows", "users", column: "created_by_id"
   add_foreign_key "flows", "users", column: "default_responsable_id"
+  add_foreign_key "form_schema_form_input_responses", "form_schema_form_inputs", name: "form_input_responses_form_input_indx"
   add_foreign_key "form_schema_form_input_responses", "form_schema_form_instances", name: "form_input_responses_form_instances_indx"
   add_foreign_key "form_schema_form_inputs", "form_schema_forms", name: "form_input_form_indx"
   add_foreign_key "form_schema_form_instances", "form_schema_forms", name: "form_instances_form_indx"
