@@ -2,14 +2,14 @@ class FlowInstancesController < ApplicationController
   respond_to :json
 
   def index
-    resources = FlowInstance.limit(10)
-    render jsonapi: resources, include: [:flow, :users]
+    resources = FlowInstance.includes(:flow, :users, :task_instances).limit(10)
+    render jsonapi: resources, include: [:flow, :users, :task_instances]
   end
 
   def create
     flow_instance_service = FlowInstanceService.new(create_params, current_user);
     if flow_instance_service.create
-      render jsonapi: flow_instance_service.resource
+      render jsonapi: flow_instance_service.resource, include: [:flow, :users, :task_instances]
     else
       render jsonapi_errors: flow_instance_service.errors, :status => :bad_request
     end
@@ -18,7 +18,7 @@ class FlowInstancesController < ApplicationController
   def update
     flow = FlowInstance.find(params[:id])
     if flow.update(update_params)
-      render jsonapi: flow
+      render jsonapi: flow, include: [:flow, :users, :task_instances]
     else
       render jsonapi_errors: flow.errors, :status => :bad_request
     end

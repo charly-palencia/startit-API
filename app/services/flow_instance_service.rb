@@ -16,6 +16,7 @@ class FlowInstanceService
       FlowInstance.transaction do
         self.resource = FlowInstance.create!(@attributes.merge(created_by: @action_user))
         resource.flow.tasks.each do |task|
+          TaskInstance.create!(task: task)
           next unless task.form
           FormSchema::FormInstance.create!(form: task.form)
         end

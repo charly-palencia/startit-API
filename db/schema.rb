@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_15_152823) do
+ActiveRecord::Schema.define(version: 2020_02_15_174406) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,6 +110,15 @@ ActiveRecord::Schema.define(version: 2020_02_15_152823) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "task_instances", force: :cascade do |t|
+    t.bigint "task_id"
+    t.datetime "due_date"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_task_instances_on_task_id"
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -146,6 +155,7 @@ ActiveRecord::Schema.define(version: 2020_02_15_152823) do
   add_foreign_key "form_schema_form_input_responses", "form_schema_form_instances", name: "form_input_responses_form_instances_indx"
   add_foreign_key "form_schema_form_inputs", "form_schema_forms", name: "form_input_form_indx"
   add_foreign_key "form_schema_form_instances", "form_schema_forms", name: "form_instances_form_indx"
+  add_foreign_key "task_instances", "tasks"
   add_foreign_key "tasks", "flows"
   add_foreign_key "tasks", "form_schema_forms"
 end

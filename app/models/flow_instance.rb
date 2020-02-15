@@ -5,6 +5,9 @@ class FlowInstance < ApplicationRecord
   belongs_to :flow
   has_and_belongs_to_many :users
 
+  has_many :tasks, through: :flow
+  has_many :task_instances, through: :tasks
+
   validates :flow, presence: true
   validates :users, presence: true
   validates :status, presence: true

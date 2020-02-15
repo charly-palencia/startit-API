@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  task_id: 1
+  due_date: 2020-02-15 12:44:06
+  status: MyString
+
+two:
+  task_id: 1
+  due_date: 2020-02-15 12:44:06
+  status: MyString

@@ -14,7 +14,8 @@ Rails.application.routes.draw do
   resources :flows do
     resources :tasks, only: [:index]
   end
-  resources :flow_instances
+  resources :flow_instances, only: [:update]
+  resources :task_instances
   resources :tasks, except: [:index]
   resources :users, only: :index
   namespace :form_schema do
