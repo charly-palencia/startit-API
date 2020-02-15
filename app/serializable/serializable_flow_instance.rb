@@ -4,6 +4,7 @@ class SerializableFlowInstance < JSONAPI::Serializable::Resource
   has_many :users
   has_many :task_instances
   belongs_to :flow
+  belongs_to :created_by
 
   attribute :title
   attribute :user_ids

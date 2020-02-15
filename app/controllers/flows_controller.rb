@@ -2,7 +2,7 @@ class FlowsController < ApplicationController
   respond_to :json
 
   def index
-    flows = Flow.limit(10)
+    flows = Flow.page(params[:page]).per(params[:page_size])
     render jsonapi: flows
   end
 

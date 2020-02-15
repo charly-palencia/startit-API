@@ -2,7 +2,11 @@ class TasksController < ApplicationController
   respond_to :json
 
   def index
-    resources = Task.where(flow_id: params[:flow_id]).includes(form: :form_inputs).order('"order" ASC')
+    resources = Task
+      .where(flow_id: params[:flow_id])
+      .includes(form: :form_inputs)
+      .page(params[:page]).per(params[:page_size])
+      .order('"order" ASC')
     render jsonapi: resources, include: [form: :form_inputs]
   end
 

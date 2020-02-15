@@ -2,7 +2,10 @@ class FlowInstancesController < ApplicationController
   respond_to :json
 
   def index
-    resources = FlowInstance.includes(:flow, :users, :task_instances).limit(10)
+    resources = FlowInstance
+      .includes(:flow, :users, :task_instances)
+      .page(params[:page])
+      .per(params[:page_size])
     render jsonapi: resources, include: [:flow, :users, :task_instances]
   end
 
@@ -26,7 +29,7 @@ class FlowInstancesController < ApplicationController
 
   def show
     flow = FlowInstance.find(params[:id])
-    render jsonapi: flow, include: [:flow, :users, :task_instances]
+    render jsonapi: flow, include: [:flow, :users, :task_instances, :created_by]
   end
 
   private
