@@ -4,7 +4,7 @@ class TaskInstancesController < ApplicationController
   def update
     resource = TaskInstance.find(params[:id])
     if resource.update(update_params)
-      render jsonapi: resource
+      render jsonapi: resource, include: [:task]
     else
       render jsonapi_errors: resource.errors, :status => :bad_request
     end
