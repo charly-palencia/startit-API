@@ -2,7 +2,7 @@ class FlowInstancesController < ApplicationController
   respond_to :json
 
   def index
-    resources = FlowInstance
+    resources = flow_instances
       .includes(:flow, :users, :task_instances)
       .page(params[:page])
       .per(params[:page_size])
@@ -45,5 +45,14 @@ class FlowInstancesController < ApplicationController
         .require(:data)
         .require(:attributes)
         .permit(:title, :due_date, user_ids: [])
+    end
+
+    def flow_instances
+      filters = params[:filters] || {}
+      instance = FlowInstance
+      if filters[:flow_id].present?
+        instance = instance.where(flow_id: filters[:flow_id])
+      end
+      instance
     end
 end
