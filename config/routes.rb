@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   resources :tasks, except: [:index]
   resources :users, only: :index
   namespace :form_schema do
+    resources :form_input_responses, only: [:create, :update]
     resources :forms do
       resources :form_inputs, controller: 'forms/form_inputs'
     end

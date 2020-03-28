@@ -9,6 +9,8 @@ class TaskInstance < ApplicationRecord
   validates :status, presence: true
   validates :flow_instance, presence: true
 
+  validates :flow_instance_id, uniqueness: {scope: :task_id} #Add DB index
+
   aasm column: :status do
     state :new, initial: true
   end

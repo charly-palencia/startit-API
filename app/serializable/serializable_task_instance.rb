@@ -1,6 +1,8 @@
 class SerializableTaskInstance < JSONAPI::Serializable::Resource
   type 'task_instances'
+
   belongs_to :task
+  belongs_to :form_instance
 
   attribute :due_date
   attribute :status
